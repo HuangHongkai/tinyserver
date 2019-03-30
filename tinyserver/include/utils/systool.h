@@ -19,10 +19,12 @@ namespace WebServer {
      */
     void print_trace(void);
 
+#ifndef throwException
 #define throwException(Exception, ...) { \
         cerr << "[" << #Exception << "] : FILE: " << string(__FILE__).substr(string(__FILE__).find_last_of('/') + 1) << "   LINE: " << __LINE__ <<  "  FUNCTION: " <<__FUNCTION__ <<endl; \
         throw Exception(__VA_ARGS__); \
     }
+#endif
 
     /**
      * https://stackoverflow.com/questions/6403803/how-to-get-backtrace-function-line-number-on-solaris
