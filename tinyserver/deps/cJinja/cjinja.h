@@ -2,14 +2,14 @@
 // Created by hhk on 18-12-19.
 //
 
-#ifndef TINY_TEMPLATE_H
-#define TINY_TEMPLATE_H
+#ifndef CJINJA_H
+#define CJINJA_H
 
 #include <stdio.h>
 #include <bits/stdc++.h>
 #include "ejson.h"
 
-namespace TinyTemplate {
+namespace cJinja {
     using std::string;
     using std::stack;
     using std::regex;

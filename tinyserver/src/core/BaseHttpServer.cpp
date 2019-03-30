@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include "utils/systool.h"
-#include "tinytemplate.h"
+#include "cjinja.h"
 
 void WebServer::BaseHttpServer::server_init() {
     s_srv_ctx = (server_context_st *) malloc(sizeof(server_context_st));
@@ -159,7 +159,7 @@ void WebServer::BaseHttpServer::handle_client_msg(client_info_t* cli, char *msg)
                 print_trace();
                 handle_500(response, e.what());
             }
-            catch (TinyTemplate::TemplateParseException& e) {
+            catch (cJinja::TemplateParseException& e) {
                 cerr << e.what() << endl;
                 handle_500(response, e.what());
             } catch (BaseException& e) {

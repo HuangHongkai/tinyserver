@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(tinyserver)
 
-add_subdirectory(deps/tinytemplate)
-include_directories(include deps/ejson/include deps/tinytemplate)
+add_subdirectory(deps/cJinja)
+include_directories(include deps/ejson/include deps/cJinja)
 
 FILE(GLOB SOURCE_FILES
         src/*.cpp

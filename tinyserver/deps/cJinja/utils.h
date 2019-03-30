@@ -2,12 +2,12 @@
 // Created by Administrator on 2019/3/30 0030.
 //
 
-#ifndef TINYTEMPLATE_UTILS_H
-#define TINYTEMPLATE_UTILS_H
+#ifndef CJINJA_UTILS_H
+#define CJINJA_UTILS_H
 #include <ctype.h>
 #include <bits/stdc++.h>
 
-namespace TinyTemplate {
+namespace cJinja {
     using std::string;
     using std::pair;
     using std::stringstream;
@@ -65,4 +65,4 @@ namespace TinyTemplate {
     }
 }
 
-#endif //TINYTEMPLATE_UTILS_H
+#endif //CJINJA_UTILS_H

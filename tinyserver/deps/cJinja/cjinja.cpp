@@ -2,7 +2,7 @@
 // Created by hhk on 18-12-19.
 //
 
-#include "tinytemplate.h"
+#include "cjinja.h"
 #include "JSONBase.h"
 #include "utils.h"
 
@@ -12,7 +12,7 @@ using EasyJson::JSONBase;
 using EasyJson::any_cast;
 using EasyJson::any;
 
-void TinyTemplate::HtmlTemplate::parse(size_t start_pos, size_t len2) {
+void cJinja::HtmlTemplate::parse(size_t start_pos, size_t len2) {
     if(len2 == 0)
         return;
     smatch result;
@@ -97,7 +97,7 @@ void TinyTemplate::HtmlTemplate::parse(size_t start_pos, size_t len2) {
     ss << tmpl.substr(last_pos, start_pos + len2 - last_pos );
 }
 
-void TinyTemplate::HtmlTemplate::parse_if(size_t start, size_t len, const string& statement) {
+void cJinja::HtmlTemplate::parse_if(size_t start, size_t len, const string& statement) {
     // TODO statement处理
     bool true_or_false = false;
     string::const_iterator start_it = tmpl.begin() + start;
@@ -204,7 +204,7 @@ void TinyTemplate::HtmlTemplate::parse_if(size_t start, size_t len, const string
     }
 }
 
-void TinyTemplate::HtmlTemplate::parse_for(size_t start, size_t len, const string& var1, const string& var2) {
+void cJinja::HtmlTemplate::parse_for(size_t start, size_t len, const string& var1, const string& var2) {
     any&& s = __parse_var(const_cast<string&>(var2));
     auto& type = s.type();
     if(type == typeid(JSONObject)) {
@@ -238,7 +238,7 @@ void TinyTemplate::HtmlTemplate::parse_for(size_t start, size_t len, const strin
     throwException(TemplateParseException, errorView(start) + "for迭代失败");
 }
 
-EasyJson::any TinyTemplate::HtmlTemplate::parse_var(const string &tmp_str) {
+EasyJson::any cJinja::HtmlTemplate::parse_var(const string &tmp_str) {
     smatch result;
     if (regex_match(tmp_str, result, Token::VAR_REGEX)) {
         auto var = result.str(1);
@@ -316,7 +316,7 @@ EasyJson::any TinyTemplate::HtmlTemplate::parse_var(const string &tmp_str) {
     throwException(TemplateParseException, tmp_str + " 解析变量失败");
 }
 
-std::string TinyTemplate::HtmlTemplate::render() {
+std::string cJinja::HtmlTemplate::render() {
     long size;
     if (tmpl.empty()) {
         size = get_file_size(file);
@@ -336,7 +336,7 @@ std::string TinyTemplate::HtmlTemplate::render() {
     return ss.str();
 }
 
-std::smatch TinyTemplate::HtmlTemplate::findNext(string::const_iterator start, const string::const_iterator end, const regex& reg, const regex& reg2) {
+std::smatch cJinja::HtmlTemplate::findNext(string::const_iterator start, const string::const_iterator end, const regex& reg, const regex& reg2) {
 
     smatch result, result2;
     if (regex_search(start, end, result, reg) == 0)
@@ -356,7 +356,7 @@ std::smatch TinyTemplate::HtmlTemplate::findNext(string::const_iterator start, c
 
 }
 
-EasyJson::any TinyTemplate::HtmlTemplate::__parse_var(string &var) {
+EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
     size_t j;
     any var_result; // 得到访问的最终结果
     size_t var_len = var.size();
@@ -421,7 +421,7 @@ EasyJson::any TinyTemplate::HtmlTemplate::__parse_var(string &var) {
     return var_result;
 }
 
-std::string TinyTemplate::HtmlTemplate::errorView(size_t pos) {
+std::string cJinja::HtmlTemplate::errorView(size_t pos) {
     size_t start = pos-10 < 0 ? 0: pos -10;
     string&& str = tmpl.substr(start, 30);
     /* 清除\n \r */
@@ -433,7 +433,7 @@ std::string TinyTemplate::HtmlTemplate::errorView(size_t pos) {
     return  str_format("%s\n          ↑\n错误信息: ", buf);
 }
 
-double TinyTemplate::HtmlTemplate::calculator(vector<any>& number, vector<char>& op) {
+double cJinja::HtmlTemplate::calculator(vector<any>& number, vector<char>& op) {
     // 例如下表达式会成为
     // 1 - 2 - 3 + 2 *3 * 4 - 4*5
     // vector<char> op = { '-', '-', '+', '*', '*', '-', '*' };
@@ -491,7 +491,7 @@ double TinyTemplate::HtmlTemplate::calculator(vector<any>& number, vector<char>&
     return result;
 }
 
-TinyTemplate::HtmlTemplate::HtmlTemplate(const std::string &str, int flag) {
+cJinja::HtmlTemplate::HtmlTemplate(const std::string &str, int flag) {
     if(flag == 0) {
         file = fopen(str.c_str(), "rb");
         if (file == nullptr)
