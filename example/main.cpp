@@ -172,8 +172,6 @@ void render_tmpl(HttpRequest &request, HttpResponse &response) {
     render(response, "tmpl.html", context);
 }
 
-#if 1
-// 服务器测试程序
 int main() {
     IHttpServer *server = new BaseHttpServer();
     server->enrol("/", render_string);
@@ -186,80 +184,3 @@ int main() {
     server->run();
 }
 
-
-#endif
-
-#if 0
-// json测试程序
-#include "http/http_parser/HttpParser.h"
-
-extern void test_json();
-
-int main() {
-    test_json();
-}
-
-#endif
-
-#if 0
-// 模板测试程序
-#include "html_template/HtmlTemplate.h"
-
-int main() {
-#if 0
-    /* test1 变量测试 */
-    HtmlTemplate html("username:{{ username }}\nparm.list[1]: {{parm.list[1][2] }} \nparm.key: {{ parm.key }}", 1);
-    JSONObject obj = {
-            {"username", 1234},
-            {"parm", {
-                {"key", "cde"},
-                {"list", {1, {1,2.3, "abcd"}, "hahaha"}},
-            }}
-    };
-    html.setValue(obj);
-    try {
-        cout << html.render() << endl;
-    }catch(exception& e) {
-        cerr << e.what() << endl;
-    }
-#endif
-    try {
-        HtmlTemplate html("hello {{username}},\n"
-                          "列表迭代如下\n"
-                          "{% for x in list %}{{ x }}\n{%endfor%}"
-                          "此时x已经是临时变量了，不可以在打印了 {{x}}\n"
-                          "字典key迭代如下\n"
-                          "{% for x in obj %}{{x}}\n{%endfor%}"
-                          "字符串拼接\n"
-                          "{{ a+b+c+\"abcdefg\" }}\n"
-                          "循环if嵌套测试与复杂表达式\n"
-                          "{%for x in list%}"
-                              "{%if x %}"
-                                  "{{ x }}\n"
-                                  "{% for y in list2%}"
-                                      "{{x}} * {{y}} + 2 * 3 - 4 + {{x}} = {{ x*y+2*3-4+x }}\n"
-                                  "{% endfor %}"
-                              "{% else %}"
-                              "xy的值为空\n"
-                              "{%endif%}"
-                          "{% endfor%}"
-                          "this is end ....", 1);
-        JSONObject obj = OBJECT(
-                KEYVALUE("username", "hhk"),
-                KEYVALUE("list", LIST(1,2,3,4,5)),
-                KEYVALUE("list2", LIST(1,2,3)),
-                KEYVALUE("obj", OBJECT(
-                            KEYVALUE("key1", "value1"),
-                            KEYVALUE("key2", 222),
-                            KEYVALUE("key3", 333),
-                        )),
-                KEYVALUE("a", "111"),
-                KEYVALUE("b", "222"),
-                KEYVALUE("c", "333"),
-        );
-        cout << html.setValue(obj).render() << endl;
-    }catch (exception& e) {
-        cerr << e.what() << endl;
-    }
-}
-#endif
