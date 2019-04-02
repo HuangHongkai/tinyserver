@@ -132,18 +132,6 @@ void re_url_test(HttpRequest &request, HttpResponse &response) {
 }
 
 void render_tmpl(HttpRequest &request, HttpResponse &response) {
-//    JSONObject context = {
-//            {"username", "hhk"},
-//            {"obj", {
-//                {"abcd", {1,2.3}},
-//                {"obj", {
-//                    {"key", "this is obj.obj.key 's value"},
-//                }},
-//            }},
-//            {"list", {1, "qwerty", 2.34, {
-//                {"key", "this is a key"},
-//            }}},
-//    };
     JSONObject context = OBJECT(
             KEYVALUE("username", "hhk"),
             KEYVALUE("obj", OBJECT(
