@@ -21,7 +21,6 @@
 
 #define LISTING 5
 #define ADDRESS "0.0.0.0"
-#define PORT 8888
 #define MAX_MSG_SIZE 1024
 #define USERSIZE 10
 
@@ -36,6 +35,7 @@ namespace WebServer {
     class BaseHttpServer : public IHttpServer {
 
     private:
+        int port;
         typedef struct {
             in_addr addr; // 客户端ip地址
             in_port_t port; // 客户端端口
@@ -58,7 +58,7 @@ namespace WebServer {
         void server_init();
 
     public:
-        BaseHttpServer();
+        BaseHttpServer(int port=8888);
 
         bool enrol(const string& url_rule, VIEW_HANDLER func) override;
 

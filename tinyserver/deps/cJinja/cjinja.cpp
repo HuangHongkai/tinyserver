@@ -365,7 +365,7 @@ EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
             var_result = var_tables[var.substr(0, j)];
             break;
         } else if (var[j] == ']') {
-            throwException(TemplateParseException, errorView(j) + "模板语法错误: " + var)
+            throwException(TemplateParseException, "模板语法错误: " + var)
         }
     }
     if (j == var_len)
@@ -378,7 +378,7 @@ EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
     } type = OBJ;
     for (; j < var_len;) {
         if (type == NULL_PTR)
-        throwException(TemplateParseException, errorView(j) + "无法对空对象进行索引 " + var);
+        throwException(TemplateParseException, "无法对空对象进行索引 " + var);
         if (var_result.type() == typeid(JSONObject)) {
             type = OBJ;
         } else if (var_result.type() == typeid(JSONArray)) {
@@ -387,13 +387,13 @@ EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
             type = UNKNOWN;
         if (var[j] == '.') {
             if (type != OBJ)
-            throwException(TemplateParseException, errorView(j) + "无法使用.访问" + var);
+            throwException(TemplateParseException, "无法使用.访问" + var);
             size_t k = j + 1;
             for (; k < var_len; k++) {
                 if (var[k] == '[' || var[k] == '.') {
-                    if (k == j + 1) throwException(TemplateParseException, errorView(k) + "不能取空的下标" + var);
+                    if (k == j + 1) throwException(TemplateParseException, "不能取空的下标" + var);
                     break;
-                } else if (var[k] == ']') throwException(TemplateParseException, errorView(k) + "不能访问到]" + var);
+                } else if (var[k] == ']') throwException(TemplateParseException, "不能访问到]" + var);
             }
             string to_vis = var.substr(j + 1, k - j - 1);
             auto temp_obj = any_cast<JSONObject>(var_result);
@@ -402,7 +402,7 @@ EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
             if (var_result.empty())
                 type = NULL_PTR;
         } else if (var[j] == '[') {
-            if (type != ARR) throwException(TemplateParseException, errorView(j) + "无法使用[]访问" + var);
+            if (type != ARR) throwException(TemplateParseException, "无法使用[]访问" + var);
             int index = 0;
             size_t k = j + 1;
             for (; k < var.size(); k++) {
@@ -410,27 +410,31 @@ EasyJson::any cJinja::HtmlTemplate::__parse_var(string &var) {
                     index = index * 10 + var[k] - '0';
                 else if (var[k] == ']') {
                     auto temp_arr = any_cast<JSONArray>(var_result);
-                    if (temp_arr.getSize() <= index) throwException(TemplateParseException, errorView(k) + "数组访问越界 " + var);
+                    if (temp_arr.getSize() <= index) throwException(TemplateParseException, "数组访问越界 " + var);
                     var_result = temp_arr[index];
                     break;
-                } else throwException(TemplateParseException, errorView(k) + "不允许非数字下标");
+                } else throwException(TemplateParseException, "不允许非数字下标");
             }
             j = k + 1;
-        } else throwException(TemplateParseException, errorView(j) + "解析错误");
+        } else throwException(TemplateParseException, "解析错误");
     }
     return var_result;
 }
 
 std::string cJinja::HtmlTemplate::errorView(size_t pos) {
-    size_t start = pos-10 < 0 ? 0: pos -10;
+    size_t start = pos < 10 ? 0: pos -10;
     string&& str = tmpl.substr(start, 30);
     /* 清除\n \r */
-    char buf[50];
-    size_t i=0;
+    char buf[50], space[11];
+    size_t i;
+    for(i = 0;i < (10 > pos ? pos : 10); i++) space[i] = ' ';
+    space[i] = 0;
+    i = 0;
     for(auto& ch: str)
         if(ch!='\r'&&ch!='\n')
             buf[i++] = ch;
-    return  str_format("%s\n          ↑\n错误信息: ", buf);
+    buf[i] = 0;
+    return  str_format("%s\n%s↑\n错误信息: ", buf, space);
 }
 
 double cJinja::HtmlTemplate::calculator(vector<any>& number, vector<char>& op) {

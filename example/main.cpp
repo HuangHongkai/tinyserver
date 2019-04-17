@@ -16,15 +16,15 @@ void render_string(HttpRequest &request, HttpResponse &response) {
 }
 
 void download_file(HttpRequest &request, HttpResponse &response) {
-    response.set_file("/home/hhk/login.py")
+    response.set_file("myfile")
             .set_content_type(STREAM);
 }
 
 void render_plain_text(HttpRequest &request, HttpResponse &response) {
-    FILE *f = fopen("file", "rb");
+    FILE *f = fopen("myfile", "rb");
     char buf[2048];
     if(f == nullptr)
-        throw Exception404("文件名为 file 的文件不存在");
+        throw Exception404("文件名为 myfile 的文件不存在");
     size_t r = fread(buf, sizeof(char), 2048, f);
     response.set_data(buf, r)
             .set_content_type(PLAIN);
@@ -161,7 +161,7 @@ void render_tmpl(HttpRequest &request, HttpResponse &response) {
 }
 
 int main() {
-    IHttpServer *server = new BaseHttpServer();
+    IHttpServer *server = new BaseHttpServer(8000);
     server->enrol("/", render_string);
     server->enrol("/download", download_file);
     server->enrol("/text", render_plain_text);

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Hello {{ username }} </h1>
+<p>你请求的url参数是 {{ parm}}</p>
+
+<h2>变量索引操作</h2>
+<p>obj.abcd[1] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ obj.abcd[1] }}</p>
+<p>list[3].key &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ list[3].key }}</p>
+<p>obj.obj.key &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ obj.obj.key}}</p>
+<p>计算表达式 21*21/3+3*8-5+3.1+obj.abcd[1] = {{ 21*21/3+3*8-5+3.1+obj.abcd[1] }}</p>
+<h2>列表迭代如下</h2>
+<ul>
+{% for x in list %}
+    <li> list中x的值: {{ x }} </li>
+{%endfor%}
+</ul>
+
+<p>此时x已经不再for-endfor范围内，不可以在打印了 {{x}} </p>
+
+<h2>字典key迭代如下</h2>
+<ul>
+    {% for key in obj2 %}
+    <li>obj的key: {{key}} </li>
+    {%endfor%}
+</ul>
+
+<h2>字典value迭代如下</h2>
+<ul>
+    {% for ,value in obj2%}
+    <li>obj的value: {{value}} </li>
+    {%endfor%}
+</ul>
+
+
+<h2>字典key,value迭代如下</h2>
+<ul>
+{% for key,value in obj2 %}
+    <li>obj的key: {{key}} , obj的value: {{ value }}</li>
+{%endfor%}
+</ul>
+
+
+<h2>字符串拼接</h2>
+<p> a+b+c+"abcdefg" 拼接为 {{ a+b+c+"abcdefg" }}</p>
+
+
+<h2>循环if嵌套测试与复杂表达式</h2>
+{%for x in list1%}
+    <ol>
+    {%if x %}
+        <ul>开始计算 x*y+2*3-4+x , 此时x为 {{ x }}
+        {% for y in list2%}
+            <li>{{x}} * {{y}} + 2 * 3 - 4 + {{x}} = {{ x*y+2*3-4+x }}</li>
+        {% endfor %}
+        <br/>
+        </ul>
+    {% else %}
+        <p style="color: red;">x的值为空</p>
+    {%endif%}
+    </ol>
+{% endfor%}
+
+<h1>if表达式测试</h1>
+<h2> == 测试</h2>
+<p style="font-size: 20px">
+    {% if a+"11"=="1111"+"1" %}
+        a("{{a}}")+"11" 等于 "1111"+"1"
+    {% else %}
+        a("{{a}}")+"11" 不等于 "1111"+"1"
+    {% endif %}
+</p>
+<p style="font-size: 20px">
+    {% if 1+1==2 %}
+        1+1=2
+    {% else %}
+        1+1!=2
+    {% endif %}
+</p>
+
+<h2> !测试 </h2>
+<p style="font-size: 20px;">
+    {% if !b %}
+        b({{b}}) 为空
+    {% else %}
+        b({{b}}) 不为空
+    {% endif %}
+</p>
+
+<h2>include测试</h2>
+{% include 'tmpl2.html' %}
+
+this is end ....
+
+</body>
+</html>

@@ -33,7 +33,7 @@ void WebServer::BaseHttpServer::server_init() {
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     inet_pton(AF_INET, ADDRESS, &servaddr.sin_addr);
-    servaddr.sin_port = htons(PORT);
+    servaddr.sin_port = htons(static_cast<uint16_t>(port));
     if (bind(fd, (struct sockaddr *) &servaddr, sizeof(servaddr))) {
         fprintf(stderr, "bind error\n");
         exit(0);
@@ -261,7 +261,7 @@ void WebServer::BaseHttpServer::idle() {
     }
 }
 
-WebServer::BaseHttpServer::BaseHttpServer() {
+WebServer::BaseHttpServer::BaseHttpServer(int port):port(port) {
     server_init();
     RegisterErrorHandler(401);
     RegisterErrorHandler(403);
@@ -270,5 +270,5 @@ WebServer::BaseHttpServer::BaseHttpServer() {
     RegisterErrorHandler(501);
     RegisterErrorHandler(502);
     RegisterErrorHandler(503);
-    cout << "server init at " << ADDRESS << ":" << PORT << " pid: " << getpid() << endl;
+    cout << "server init at " << ADDRESS << ":" << port << " pid: " << getpid() << endl;
 }
