@@ -9,7 +9,7 @@
 ```shell
 cd build
 cmake ..
-make
+make  (当前目录会生成libtinyserver.a和一个名为MyWebServer的测试程序)
 ./MyWebServer.exe  （或者是./MyWebServer）
 ```
 
