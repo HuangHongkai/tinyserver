@@ -12,6 +12,9 @@ cmake ..
 make
 ./MyWebServer.exe  （或者是./MyWebServer）
 ```
+注：
+- 如果缺少libiconv这个库（该库是编码转换库）,请自行安装
+- windows下推荐使用cygwin编译（cygwin下需要安装libiconv这个库，否则链接错误）
 
 
 
